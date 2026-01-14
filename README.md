@@ -4,7 +4,29 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-People recognition
+
+## Project Installation
+
+```bash
+docker-compose build
+docker-compose run test_task
+```
+
+## Run One of Algorithms: Yolo 11 or RF-DETR
+
+```bash
+python3 main.py -m yolo 
+python3 main.py -m rf-detr
+```
+
+## To test performance:
+
+```bash
+python3 main.py -m yolo --mode performance
+python3 main.py -m rf-detr --mode performance
+```
+
+
 
 ## Project Organization
 
@@ -58,4 +80,7 @@ People recognition
 ```
 
 --------
+
+
+
 

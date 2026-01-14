@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  test_task:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: people_rec
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/workspace
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    restart: unless-stopped

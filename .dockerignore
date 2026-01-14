@@ -1,0 +1,61 @@
+# Exclude data and output directories (large files)
+data/
+output/
+runs/
+
+# Exclude build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Exclude development files
+.git/
+.gitignore
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Exclude documentation build
+docs/site/
+site/
+
+# Exclude notebooks (if not needed in container)
+notebooks/
+
+# Exclude test files
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Exclude environment files
+.env
+.venv
+venv/
+env/
+
+# Exclude cache
+.cache/
+.ruff_cache/
+.mypy_cache/
+
+# Exclude large model files (if any)
+*.pt
+*.pth
+*.onnx
+models/
+
+# Exclude references
+references/
+
+# Exclude performance results
+performance_results.json
+

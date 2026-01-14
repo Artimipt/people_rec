@@ -1,24 +1,24 @@
 import cv2
 import torch
-from tqdm import tqdm
 
-
-def get_people_boxes(results):
+def yolo_people_boxes(results):
     people_boxes = []
+    confidences = []
     for result in results:
         boxes = result.boxes
         for box in boxes:
             cls_id = int(box.cls.item())
             if cls_id == 0:  # COCO class ID for 'person'
                 people_boxes.append(box)
-    return people_boxes
+                confidences.append(float(box.conf.item()))
 
-def detect(video_path: str, output_path: str, model):
+    return people_boxes, confidences
+
+def detect(video_path: str, output_path: str, model, model_type: str):
 
     if isinstance(model, torch.nn.Module):
         model.eval()
 
-    
     cap = cv2.VideoCapture(video_path)
 
     # Get video properties
@@ -32,23 +32,32 @@ def detect(video_path: str, output_path: str, model):
 
     while cap.isOpened():
         ret, frame = cap.read()
+
         if not ret:
             break
 
-        results = model(frame)
+        if model_type == "yolo":
+            results = model(frame)
+            people_boxes, confidences = yolo_people_boxes(results)
 
-        people_boxes = get_people_boxes(results, style = "yolo")
+        elif model_type == "rf-detr":
+            results = model.predict(frame, threshold=0.5)
+            people_boxes = results.xyxy
+            confidences = results.confidence
 
         annotated_frame = frame.copy()
-        for box in people_boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            conf = float(box.conf.item())
+        for i, box in enumerate(people_boxes):
+            if model_type == "yolo":
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+            else:  
+                x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(annotated_frame, f'Person {conf:.2f}', (x1, y1 - 10),
+            cv2.putText(annotated_frame, f'Person {confidences[i]:.2f}', (x1, y1 - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
         out.write(annotated_frame)
     cap.release()
     out.release()
+
 
 

@@ -1,13 +1,14 @@
 ipython
-jupyterlab
 matplotlib
 mkdocs
 notebook
-numpy
+numpy<2.0
 pandas
 pip
 python-dotenv
 ruff
 scikit-learn
 ultralytics
--e .
+GPUtil
+# RF-DETR depends on cache classes added in newer Transformers versions
+transformers>=4.46.0
